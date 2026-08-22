@@ -1,14 +1,11 @@
 package mangoclient;
 
-import mangoclient.config.Config;
-import mangoclient.gui.ClickGUI;
-import mangoclient.keybind.Keybinds;
-import mangoclient.module.Manager;
-import mangoclient.render.WorldRender;
+import mangoclient.module.ModuleManager;
+import mangoclient.module.render.NewChunkFinder;
 import mangoclient.toast.MangoToast;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 
@@ -20,14 +17,14 @@ public class MangoClientMod implements ClientModInitializer {
 	public void onInitializeClient() {
 		mc = Minecraft.getInstance();
 
-		Config.init();
-		Manager.init();
-		Keybinds.init();
 		MangoToast.init();
-		ClickGUI.init();
+		ModuleManager.init();
 
-		WorldRenderEvents.AFTER_ENTITIES.register(WorldRender::onWorldRender);
-		HudRenderCallback.EVENT.register(ClickGUI::onHudRender);
-		ClientChunkEvents.CHUNK_LOAD.register((world, chunk) -> Manager.newChunkFinder.onChunkLoad(chunk.getPos().x, chunk.getPos().z));
+		WorldRenderEvents.AFTER_ENTITIES.register(ModuleManager::onWorldRender);
+		ClientTickEvents.END_CLIENT_TICK.register(client -> ModuleManager.tick());
+		ClientChunkEvents.CHUNK_LOAD.register((world, chunk) -> {
+			NewChunkFinder ncf = ModuleManager.getModule(NewChunkFinder.class);
+			if (ncf != null) ncf.onChunkLoad(chunk.getPos().x, chunk.getPos().z);
+		});
 	}
 }

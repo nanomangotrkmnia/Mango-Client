@@ -3,7 +3,10 @@
 	"package": "mangoclient.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"XrayMixin"
+		"XrayMixin",
+		"KeyboardMixin",
+		"MouseMixin",
+		"RenderSystemMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -1,15 +1,15 @@
-package mangoclient.module;
+package mangoclient.module.render;
 
 import mangoclient.MangoClientMod;
+import mangoclient.module.Module;
+import mangoclient.module.ModuleCategory;
 import mangoclient.settings.BlockListSetting;
 
 public class Xray extends Module {
-	public final BlockListSetting blocks;
+	public final BlockListSetting blocks = blockList("Xray Blocks");
 
 	public Xray() {
-		super("Xray", "Render only selected ores/blocks");
-		blocks = new BlockListSetting("Xray Blocks");
-		addSetting(blocks);
+		super("Xray", "Render only selected ores and blocks", ModuleCategory.RENDER);
 		blocks.add("minecraft:ancient_debris");
 		blocks.add("minecraft:diamond_ore");
 		blocks.add("minecraft:deepslate_diamond_ore");

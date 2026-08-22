@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import mangoclient.MangoClientMod;
-import mangoclient.module.Manager;
-import mangoclient.module.Xray;
+import mangoclient.module.ModuleManager;
+import mangoclient.module.render.Xray;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -20,7 +20,7 @@ public class XrayMixin {
 	@Inject(method = "shouldRenderFace", at = @At("HEAD"), cancellable = true)
 	private static void mangoXray(BlockState state, BlockState neighborState, Direction side,
 			CallbackInfoReturnable<Boolean> cir) {
-		Xray xray = Manager.xray;
+		Xray xray = ModuleManager.getModule(Xray.class);
 		if (xray == null || !xray.enabled || MangoClientMod.mc.level == null) return;
 		Identifier id = BuiltInRegistries.BLOCK.getKey(state.getBlock());
 		if (id != null && !xray.isXrayBlock(id.toString())) {

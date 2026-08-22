@@ -11,16 +11,30 @@ public class ColorSetting extends Setting {
 		this.a = a;
 	}
 
+	public void set(int r, int g, int b, int a) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.a = a;
+	}
+
 	public int packed() {
 		return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
-	public void cycle() {
-		a = a >= 255 ? 80 : a + 50;
+	public float rf() {
+		return r / 255f;
 	}
 
-	@Override
-	public String getDisplay() {
-		return name + " [#" + String.format("%02X%02X%02X]", r, g, b) + "]";
+	public float gf() {
+		return g / 255f;
+	}
+
+	public float bf() {
+		return b / 255f;
+	}
+
+	public float af() {
+		return a / 255f;
 	}
 }

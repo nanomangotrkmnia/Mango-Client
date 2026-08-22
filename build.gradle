@@ -4,11 +4,7 @@ plugins {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	mavenCentral()
 }
 
 loom {
@@ -22,6 +18,12 @@ loom {
 	}
 }
 
+configurations {
+	library
+	implementation.extendsFrom(library)
+	clientImplementation.extendsFrom(implementation)
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -30,6 +32,15 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// ImGui (Dear ImGui Java bindings)
+	library "io.github.spair:imgui-java-binding:${project.imguiVersion}"
+	library("io.github.spair:imgui-java-lwjgl3:${project.imguiVersion}") {
+		exclude group: "org.lwjgl"
+	}
+	library "io.github.spair:imgui-java-natives-windows:${project.imguiVersion}"
+	library "io.github.spair:imgui-java-natives-linux:${project.imguiVersion}"
+	library "io.github.spair:imgui-java-natives-macos:${project.imguiVersion}"
 }
 
 processResources {
@@ -62,6 +73,9 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_$projectName"}
 	}
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	from(configurations.library.collect { if (it.isDirectory()) it else zipTree(it) })
 }
 
 // configure the maven publication

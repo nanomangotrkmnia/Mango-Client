@@ -1,9 +1,9 @@
 package mangoclient.toast;
 
 import mangoclient.MangoClientMod;
-import mangoclient.module.Manager;
 import mangoclient.module.Module;
-import mangoclient.module.Notifications;
+import mangoclient.module.ModuleManager;
+import mangoclient.module.misc.Notifications;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
@@ -16,7 +16,7 @@ public class MangoToast {
 
 	public static void module(Module m) {
 		if (MangoClientMod.mc == null) return;
-		Notifications n = Manager.notifications;
+		Notifications n = ModuleManager.getModule(Notifications.class);
 		if (n != null && !n.enabled) return;
 		ToastManager tm = MangoClientMod.mc.getToastManager();
 		tm.addToast(new ModuleToast(m.name, m.enabled));

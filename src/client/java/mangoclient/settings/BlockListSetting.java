@@ -18,8 +18,7 @@ public class BlockListSetting extends Setting {
 		return blocks.contains(id);
 	}
 
-	@Override
-	public String getDisplay() {
-		return name + " (" + blocks.size() + " blocks)";
+	public int size() {
+		return blocks.size();
 	}
 }

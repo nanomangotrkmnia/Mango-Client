@@ -11,9 +11,4 @@ public class BoolSetting extends Setting {
 	public void toggle() {
 		value = !value;
 	}
-
-	@Override
-	public String getDisplay() {
-		return name + ": " + (value ? "ON" : "OFF");
-	}
 }
